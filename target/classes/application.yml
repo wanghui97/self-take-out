@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: self_take_out
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/self_take_out?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: 123456
+  # 在SpringBoot中，默认我们要将静态资源放到 resources/static 或者 resources/public 或者 resources/resources 或者 resources/META-INF/resources 中才能对外提供服务
+  # spring.mvc.static-path-pattern可以修改静态资源访问路径，spring.mvc.static-path-pattern默认是/**,则
+  # ​例如我们想访问文件：resources/static/index.html 只需要在访问时资源路径写成/index.html即可。
+  #​ 例如我们想访问文件：resources/static/pages/login.html 访问的资源路径写成： /pages/login.html
+  # 例如想让访问静态资源的url必须前缀有/res。例如/res/index.html 才能访问到static目录中的。我们可以修改为：spring.mvc.static-path-pattern: /res/**
+#  mvc:
+#    static-path-pattern: /** #修改静态资源访问路径
+  # 修改静态资源存放目录
+  # {"classpath:/META-INF/resources/", "classpath:/resources/", "classpath:/static/", "classpath:/public/"}
+  #​ 我们可以修改 spring.web.resources.static-locations 这个配置来修改静态资源的存放目录。，例如：
+#  web:
+#    resources:
+#      static-locations:
+mybatis-plus:
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID
