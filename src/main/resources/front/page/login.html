@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
-        <title>菩提阁</title>
+        <title>餐掌柜</title>
         <link rel="icon" href="./../images/favico.ico">
         <!--不同屏幕尺寸根字体设置-->
         <script src="./../js/base.js"></script>
@@ -47,7 +47,7 @@
             data(){
                 return {
                     form:{
-                        phone:'',
+                        phone:'17395043749',
                         code:''
                     },
                     msgFlag:false,
@@ -58,12 +58,21 @@
             created(){},
             mounted(){},
             methods:{
-                getCode(){
+                async getCode(event){
                     this.form.code = ''
                     const regex = /^(13[0-9]{9})|(15[0-9]{9})|(17[0-9]{9})|(18[0-9]{9})|(19[0-9]{9})$/;
                     if (regex.test(this.form.phone)) {
-                        this.msgFlag = false
-                        this.form.code = (Math.random()*1000000).toFixed(0)
+                        //this.msgFlag = false
+                        //this.form.code = (Math.random()*1000000).toFixed(0)
+                        const res = await getMsg(this.form)
+                        if(res.code !== 200){
+                            this.msgFlag = true
+                            this.$notify({ type:'warning', message:res.msg});
+                            return ;
+                        }
+                        this.form.code = res.data.code;
+                        console.log("------------------",event)
+                        console.log("------------------",event.target)
                     }else{
                         this.msgFlag = true
                     }
@@ -71,9 +80,9 @@
                 async btnLogin(){
                     if(this.form.phone && this.form.code){
                         this.loading = true
-                        const res = await loginApi({phone:this.form.phone})
+                        const res = await loginApi({phone:this.form.phone,code:this.form.code})
                         this.loading = false
-                        if(res.code === 1){
+                        if(res.code === 200){
                             sessionStorage.setItem("userPhone",this.form.phone)
                             window.requestAnimationFrame(()=>{
                                 window.location.href= '/front/index.html'

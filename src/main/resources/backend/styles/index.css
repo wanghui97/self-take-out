@@ -3,7 +3,7 @@
   height: 100%;
   width: 100%;
   overflow-y: hidden;
-  min-width: 1366px;
+  min-width: 1300px;
   overflow-x: auto;
   display: flex;
 }
@@ -38,7 +38,7 @@
 
 .sidebar-container .horizontal-collapse-transition {
   transition: 0s width ease-in-out, 0s padding-left ease-in-out,
-    0s padding-right ease-in-out;
+  0s padding-right ease-in-out;
 }
 
 .sidebar-container .scrollbar-wrapper {
@@ -284,9 +284,9 @@
   padding: 0px !important;
 }
 .simple-mode.first-level
-  .el-submenu
-  > .el-submenu__title
-  .el-submenu__icon-arrow {
+.el-submenu
+> .el-submenu__title
+.el-submenu__icon-arrow {
   display: none;
 }
 .simple-mode.first-level .el-submenu > .el-submenu__title > span {

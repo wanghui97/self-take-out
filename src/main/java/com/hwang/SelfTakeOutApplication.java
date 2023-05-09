@@ -3,6 +3,7 @@ package com.hwang;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
 import java.rmi.activation.ActivationGroup_Stub;
 
@@ -15,6 +16,7 @@ import java.rmi.activation.ActivationGroup_Stub;
  */
 @Slf4j
 @SpringBootApplication
+@ServletComponentScan
 public class SelfTakeOutApplication {
     public static void main(String[] args) {
         SpringApplication.run(SelfTakeOutApplication.class,args);

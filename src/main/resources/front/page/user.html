@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
-    <title>菩提阁</title>
+    <title>餐掌柜</title>
     <link rel="icon" href="./../images/favico.ico">
     <!--element-ui的样式-->
     <link rel="stylesheet" href="../../backend/plugins/element-ui/index.css" />
@@ -24,7 +24,7 @@
             <div class="divUser">
                 <img src="./../images/headPage.png"/>
                 <div class="desc">
-                    <div class="divName">林之迷 <img src="./../images/women.png"/></div>
+                    <div class="divName">王老大 <img src="./../images/women.png"/></div>
                     <div class="divPhone">{{userPhone}}</div>
                 </div>
             </div>
@@ -133,7 +133,7 @@
                         pageSize:1
                     }
                     const res = await orderPagingApi(params)
-                    if(res.code === 1){
+                    if(res.code === 200){
                         this.order = res.data.records
                         if(this.order && this.order[0].orderDetails){
                             let number = 0
@@ -170,7 +170,7 @@
                 },
                 async addOrderAgain(){
                     const res = await orderAgainApi({id:this.order[0].id})
-                    if(res.code === 1){
+                    if(res.code === 200){
                         window.requestAnimationFrame(()=>{
                             window.location.href = '/front/index.html'
                         }) 
@@ -180,7 +180,7 @@
                 },
                 async toPageLogin(){
                     const res = await loginoutApi()
-                    if(res.code === 1){
+                    if(res.code === 200){
                         window.requestAnimationFrame(()=>{
                             window.location.href = '/front/page/login.html'
                         }) 

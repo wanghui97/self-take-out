@@ -25,7 +25,16 @@ function checkUserName (rule, value, callback){
     callback()
   }
 }
-
+//校验密码
+function checkPassWord (rule, value, callback){
+  if (value == "") {
+    callback(new Error("请输入密码"))
+  } else if (value.length > 20 || value.length <6) {
+    callback(new Error("密码长度应是6-20"))
+  } else {
+    callback()
+  }
+}
 //校验姓名
 function checkName (rule, value, callback){
   if (value == "") {

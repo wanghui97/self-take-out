@@ -93,6 +93,7 @@
         :total="counts"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
+        :current-page.sync="page"
       ></el-pagination>
     </div>
     <el-dialog
@@ -176,9 +177,10 @@
         methods: {
           async init () {
             await getCategoryPage({'page': this.page, 'pageSize': this.pageSize}).then(res => {
-              if (String(res.code) === '1') {
+              if (String(res.code) === '200') {
                 this.tableData = res.data.records
                 this.counts = Number(res.data.total)
+                this.page = res.data.current;
               } else {
                 this.$message.error(res.msg || '操作失败')
               }
@@ -224,7 +226,7 @@
               'type': 'warning'
             }).then(() => {
               deleCategory(id).then(res => {
-                if (res.code === 1) {
+                if (res.code === 200) {
                   this.$message.success('删除成功！')
                   this.handleQuery()
                 } else {
@@ -245,7 +247,7 @@
                   if (reg.test(classData.sort)) {
                     addCategory({'name': classData.name,'type':this.type, sort: classData.sort}).then(res => {
                       console.log(res)
-                      if (res.code === 1) {
+                      if (res.code === 200) {
                         this.$message.success('分类添加成功！')
                         if (!st) {
                           this.classData.dialogVisible = false
@@ -271,7 +273,7 @@
               const reg = /^\d+$/
               if (reg.test(this.classData.sort)) {
                 editCategory({'id':this.classData.id,'name': this.classData.name, sort: this.classData.sort}).then(res => {
-                  if (res.code === 1) {
+                  if (res.code === 200) {
                     this.$message.success('分类修改成功！')
                     this.classData.dialogVisible = false
                     this.handleQuery()
