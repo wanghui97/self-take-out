@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Service("ordersService")
 @Transactional
-public class OrdersServiceImpl<s> extends ServiceImpl<OrdersMapper, Orders> implements OrdersService {
+public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> implements OrdersService {
     @Autowired
     private OrdersMapper ordersMapper;
     @Autowired
@@ -64,6 +64,7 @@ public class OrdersServiceImpl<s> extends ServiceImpl<OrdersMapper, Orders> impl
     public ResponseResult queryCurrentOrders(Page ordersPage) {
         LambdaQueryWrapper<Orders> ordersLambdaQueryWrapper = new LambdaQueryWrapper<>();
         ordersLambdaQueryWrapper.eq(Orders::getUserId,BaseContextUtil.getCurrentId());
+        ordersLambdaQueryWrapper.orderByDesc(Orders::getOrderTime);
         ordersPage = ordersMapper.selectPage(ordersPage, ordersLambdaQueryWrapper);
         List<Orders> ordersPageRecordList = ordersPage.getRecords();
         List<OrderVo> orderVos = BeanCopyUtils.copyBeanList(ordersPageRecordList, OrderVo.class);
@@ -148,17 +149,21 @@ public class OrdersServiceImpl<s> extends ServiceImpl<OrdersMapper, Orders> impl
     public ResponseResult addOrderAgain(Orders orders) {
         //复制订单
         orders = this.getById(orders.getId());
+        Long oldOrderId = orders.getId();
         if(Objects.nonNull(orders)){
             orders.setId(null);
             orders.setStatus(CodeLibraryUtil.WAIT_PAY);
+            orders.setOrderTime(new Date());
+            orders.setCheckoutTime(new Date());
         }
         this.save(orders);
         //复制订单明细
         LambdaQueryWrapper<OrderDetail> orderDetailLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        orderDetailLambdaQueryWrapper.eq(OrderDetail::getOrderId,orders.getId());
+        orderDetailLambdaQueryWrapper.eq(OrderDetail::getOrderId,oldOrderId);
         List<OrderDetail> orderDetailList = orderDetailService.list(orderDetailLambdaQueryWrapper);
+        Orders finalOrders = orders;
         List<OrderDetail> orderDetailsList = orderDetailList.stream()
-                .map(orderDetail -> orderDetail.setId(null))
+                .map(orderDetail -> orderDetail.setId(null).setOrderId(finalOrders.getId()))
                 .collect(Collectors.toList());
         orderDetailService.saveBatch(orderDetailsList);
         return ResponseResult.okResult();
